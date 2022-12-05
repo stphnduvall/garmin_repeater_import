@@ -1,6 +1,4 @@
 #!/mnt/g/my_git/garmin_repeater_import/venv/bin/python
-from sys import argv
-import requests
 
 
 def filter_repeaters(repeaters, filter={}, require={}):
@@ -38,14 +36,17 @@ def filter_repeaters(repeaters, filter={}, require={}):
 
 
 if __name__ == "__main__":
+    from sys import argv
+    import requests
+
     if len(argv) == 1:
         state = 'georgia'
     else:
         state = argv[1]
-    
+
     response = requests.get(f'https://www.repeaterbook.com/api/export.php?country=United%20States&state={state}').json()
     repeaters = response['results'][:-1]
-    
+
     # filter removes data with corresponding values
     filter = {'Use': 'PRIVATE', 'Operational Status': "Off-air"}
     # require ensures data has corresponding values
