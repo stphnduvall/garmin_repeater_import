@@ -1,8 +1,21 @@
 #!/mnt/g/my_git/garmin_repeater_import/venv/bin/python
 import requests
-from time import localtime
+import simplekml
 import query_repeaters
-import create_kml
+from time import localtime
+
+
+def createKML(repeaters):
+    kml = simplekml.Kml()
+    for repeater in repeaters:
+        if repeater.band not in ['2m', '70cm']:
+            continue
+        point = kml.newpoint(name=repeater.name())
+        point.coords = [repeater.get_coords()]
+
+        point.description = repeater.description()
+        point.extendeddata.newdata('state', 'Georgia')
+    return kml
 
 
 if __name__ == "__main__":
@@ -13,6 +26,5 @@ if __name__ == "__main__":
     require = {"EchoLink Node": ["", "0"], "FM Analog": "Yes", "IRLP Node": ["", "0"], "Wires Node": ""}
     repeaters = query_repeaters.filter_repeaters(response['results'][:-1], filter=filter, require=require)
 
-    kml = create_kml.createKML(repeaters)
-
+    kml = createKML(repeaters)
     kml.save("repeaters" + "".join(map(str, localtime()[1:5])) + ".kml")
