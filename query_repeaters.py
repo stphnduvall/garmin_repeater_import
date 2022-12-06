@@ -52,7 +52,7 @@ class Repeater():
         return name
 
     def description(self):
-        desc = f"rx: {self.frequency}, tx: {self.input_frequency}, {self.pl}, {self.mode}, {self.last_update}"
+        desc = f"rx:{self.frequency}, tx:{self.input_frequency}, {self.pl}, {self.mode}\n{self.last_update}"
         return desc
 
 

@@ -15,6 +15,8 @@ if __name__ == "__main__":
     filter = {'Use': 'PRIVATE', 'Operational Status': "Off-air"}
     require = {"EchoLink Node": ["", "0"], "FM Analog": "Yes", "IRLP Node": ["", "0"], "Wires Node": ""}
     for repeater in query_repeaters.filter_repeaters(repeaters, filter=filter, require=require):
+        if repeater.band not in ['2m', '70cm']:
+            continue
         point = kml.newpoint(name=repeater.name())
         point.coords = [repeater.get_coords()]
 
