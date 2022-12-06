@@ -23,8 +23,3 @@ if __name__ == "__main__":
         point.description = repeater.description()
 
     kml.save("test.kml")
-
-# {'State ID': '13', 'Rptr ID': '77', 'Frequency': '147.19500', 'Input Freq': '147.79500', 'PL': '141.3', 'TSQ': '141.3',
-# 'Lat': '30.70019640', 'Long': '-83.98794630', 'Callsign': 'W4UCJ', 'Use': 'OPEN', 'Operational Status':
-# 'On-air', 'ARES': 'No', 'RACES': 'No', 'SKYWARN': 'No', 'CANWARN': 'No', 'IRLP Node': '0', 'Wires Node': '',
-# 'FM Analog': 'Yes', 'DMR': 'No', 'DMR Color Code': '', 'DMR ID': '', 'D-Star': 'No', 'Last Update': '2022-10-14'}
