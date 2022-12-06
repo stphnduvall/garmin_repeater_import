@@ -4,8 +4,8 @@ class Repeater():
     def __init__(self, rptr):
         self.state_id = rptr['State ID']
         self.rptr_id = rptr['Rptr ID']
-        self.frequency = rptr['Frequency']
-        self.input_frequency = rptr['Input Freq']
+        self.frequency = float(rptr['Frequency'])
+        self.input_frequency = float(rptr['Input Freq'])
         self.pl = rptr['PL']
         self.tsq = rptr['TSQ']
         self.lat = rptr['Lat']
@@ -25,12 +25,17 @@ class Repeater():
         self.d_star = rptr['D-Star']
         self.system_fusion = rptr['System Fusion']
         self.last_update = rptr['Last Update']
+        self.band = ''
         self.get_mode()
 
     def get_mode(self):
         mode = []
         if self.fm_analog == "Yes":
             mode.append("FM")
+            if self.frequency > 144 and self.frequency < 148:
+                self.band = "2m"
+            elif self.frequency > 440 and self.frequency < 447:
+                self.band = "70cm"
         if self.dmr == "Yes":
             mode.append("DMR")
         if self.d_star == "Yes":
@@ -41,6 +46,14 @@ class Repeater():
 
     def get_coords(self):
         return (self.long, self.lat)
+
+    def name(self):
+        name = self.callsign + " " + (self.band if self.mode == 'FM' else self.mode)
+        return name
+
+    def description(self):
+        desc = f"rx: {self.frequency}, tx: {self.input_frequency}, {self.pl}, {self.mode}, {self.last_update}"
+        return desc
 
 
 def filter_repeaters(repeaters, filter={}, require={}):
@@ -94,4 +107,4 @@ if __name__ == "__main__":
     # require ensures data has corresponding values
     require = {"EchoLink Node": ["", "0"], "FM Analog": "Yes", "IRLP Node": ["", "0"], "Wires Node": ""}
     for repeater in filter_repeaters(repeaters, filter=filter, require=require):
-        print(repeater.mode)
+        print(repeater.callsign)

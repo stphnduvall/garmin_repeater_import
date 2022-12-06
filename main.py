@@ -14,20 +14,11 @@ if __name__ == "__main__":
 
     filter = {'Use': 'PRIVATE', 'Operational Status': "Off-air"}
     require = {"EchoLink Node": ["", "0"], "FM Analog": "Yes", "IRLP Node": ["", "0"], "Wires Node": ""}
-    for rptr in query_repeaters.filter_repeaters(repeaters, filter=filter, require=require):
-        repeater = query_repeaters.Repeater(rptr)
-        point = kml.newpoint(name=repeater.callsign)
+    for repeater in query_repeaters.filter_repeaters(repeaters, filter=filter, require=require):
+        point = kml.newpoint(name=repeater.name())
         point.coords = [repeater.get_coords()]
 
-        rx = repeater.frequency
-        tx = repeater.input_frequency
-        uplink = repeater.pl
-        mode = repeater.mode
-        last_update = repeater.last_update
-
-        point.description = f"rx: {rx}, tx: {tx}, {uplink}, {mode}, {last_update}"
-
-    print(kml.allfeatures)
+        point.description = repeater.description()
 
     kml.save("test.kml")
 
