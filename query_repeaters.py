@@ -1,5 +1,47 @@
 #!/mnt/g/my_git/garmin_repeater_import/venv/bin/python
 
+class Repeater():
+    def __init__(self, rptr):
+        self.state_id = rptr['State ID']
+        self.rptr_id = rptr['Rptr ID']
+        self.frequency = rptr['Frequency']
+        self.input_frequency = rptr['Input Freq']
+        self.pl = rptr['PL']
+        self.tsq = rptr['TSQ']
+        self.lat = rptr['Lat']
+        self.long = rptr['Long']
+        self.callsign = rptr['Callsign']
+        self.operational_status = rptr['Operational Status']
+        self.ares = rptr['ARES']
+        self.races = rptr['RACES']
+        self.skywarn = rptr['SKYWARN']
+        self.canwarn = rptr['CANWARN']
+        self.irlp_node = rptr['IRLP Node']
+        self.wires_node = rptr['Wires Node']
+        self.fm_analog = rptr['FM Analog']
+        self.dmr = rptr['DMR']
+        self.dmr_color_code = rptr['DMR Color Code']
+        self.dmr_id = rptr['DMR ID']
+        self.d_star = rptr['D-Star']
+        self.system_fusion = rptr['System Fusion']
+        self.last_update = rptr['Last Update']
+        self.get_mode()
+
+    def get_mode(self):
+        mode = []
+        if self.fm_analog == "Yes":
+            mode.append("FM")
+        if self.dmr == "Yes":
+            mode.append("DMR")
+        if self.d_star == "Yes":
+            mode.append("D*")
+        if self.system_fusion == "Yes":
+            mode.append("YSF")
+        self.mode = "/".join(mode)
+
+    def get_coords(self):
+        return (self.long, self.lat)
+
 
 def filter_repeaters(repeaters, filter={}, require={}):
     keys = [*repeaters[0].keys()]
@@ -31,7 +73,7 @@ def filter_repeaters(repeaters, filter={}, require={}):
         # Gets rid of the shit keys I don't want.
         for dumb_key in dumb_keys:
             repeater.pop(dumb_key)
-        if (required and not filtered): filtered_repeaters.append(repeater)
+        if (required and not filtered): filtered_repeaters.append(Repeater(repeater))
     return filtered_repeaters
 
 
@@ -52,4 +94,4 @@ if __name__ == "__main__":
     # require ensures data has corresponding values
     require = {"EchoLink Node": ["", "0"], "FM Analog": "Yes", "IRLP Node": ["", "0"], "Wires Node": ""}
     for repeater in filter_repeaters(repeaters, filter=filter, require=require):
-        print(repeater)
+        print(repeater.mode)
