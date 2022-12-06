@@ -4,8 +4,8 @@
 def filter_repeaters(repeaters, filter={}, require={}):
     keys = [*repeaters[0].keys()]
     dumb_keys = [ 'Country', 'Nearest City', 'Landmark', 'County', 'State', 'Precise', 'AllStar Node', 'EchoLink Node',
-        'NXDN', 'APCO P-25', 'P-25 NAC', 'Tetra', 'Tetra MCC', 'Tetra MNC', 'System Fusion', 'YSF DG ID Uplink',
-        'YSF DG IS Downlink', 'YSF DSC'
+        'NXDN', 'APCO P-25', 'P-25 NAC', 'Tetra', 'Tetra MCC', 'Tetra MNC', 'YSF DG ID Uplink',
+        'YSF DG IS Downlink', 'YSF DSC', 'Use'
     ]
 
     filtered_repeaters = []
