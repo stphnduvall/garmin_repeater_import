@@ -22,5 +22,6 @@ if __name__ == "__main__":
         point.coords = [repeater.get_coords()]
 
         point.description = repeater.description()
+        point.extendeddata.newdata('state', 'Georgia')
 
     kml.save("repeaters" + "".join(map(str, localtime()[1:5])) + ".kml")
