@@ -73,9 +73,7 @@ def filter_repeaters(repeaters, filter={}, require={}):
                     filtered = True
             elif repeater[key] == filter[key]:
                 filtered = True
-        i = 0
         for key in require.keys():
-            i += 1
             if type(require[key]) == list:
                 if repeater[key] not in require[key]:
                     required = False
