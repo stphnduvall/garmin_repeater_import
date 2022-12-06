@@ -3,6 +3,7 @@ from sys import argv
 import requests
 import simplekml
 import query_repeaters
+from time import localtime
 
 
 if __name__ == "__main__":
@@ -22,4 +23,4 @@ if __name__ == "__main__":
 
         point.description = repeater.description()
 
-    kml.save("test.kml")
+    kml.save("repeaters" + "".join(map(str, localtime()[1:5])) + ".kml")
