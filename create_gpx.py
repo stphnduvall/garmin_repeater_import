@@ -14,6 +14,9 @@ def create_gpx(repeaters):
         waypoint.description = repeater.description()
         waypoint.symbol = 'Custom 1'
 
+        if repeater.dmr == "Yes":
+            waypoint.symbol = 'Custom 2'
+
         gpx.waypoints.append(waypoint)
 
     return gpx
