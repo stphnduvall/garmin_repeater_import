@@ -1,8 +1,5 @@
 #!/mnt/g/my_git/garmin_repeater_import/venv/bin/python
-import requests
 import simplekml
-import query_repeaters
-from time import localtime
 
 
 def createKML(repeaters):
@@ -19,6 +16,10 @@ def createKML(repeaters):
 
 
 if __name__ == "__main__":
+    from time import localtime
+    import requests
+    import query_repeaters
+
     state = "georgia"
     url = f'https://www.repeaterbook.com/api/export.php?country=United%20States&state={state}'
     response = requests.get(url).json()

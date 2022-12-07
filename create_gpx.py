@@ -1,6 +1,5 @@
 import gpxpy
 import gpxpy.gpx
-import query_repeaters
 
 
 def create_gpx(repeaters):
@@ -24,6 +23,7 @@ def create_gpx(repeaters):
 
 if __name__ == "__main__":
     import requests
+    import query_repeaters
     state = "georgia"
     url = f'https://www.repeaterbook.com/api/export.php?country=United%20States&state={state}'
     response = requests.get(url).json()
