@@ -1,15 +1,14 @@
 import gpxpy
 import gpxpy.gpx
 from geopy.distance import lonlat, distance
+from geopy.units import rad, degrees
 from create_kml import create_track, create_rect_kml
-from find_along_path import Rectangle
 from math import sin, cos, sqrt, asin, acos, atan2
 
 def mile_divisions(segment: gpxpy.gpx.GPXTrackSegment):
     total_distance = 0.0
     cur_distance = 0.0
     mile_markers = []
-    mile_markers2 = []
     for p in range(0, len(segment.points) - 1):
         pt_distance = distance(lonlat(segment.points[p].longitude, segment.points[p].latitude), lonlat(segment.points[p+1].longitude, segment.points[p+1].latitude)).miles
         cur_distance += pt_distance
@@ -17,19 +16,14 @@ def mile_divisions(segment: gpxpy.gpx.GPXTrackSegment):
 
         if cur_distance > 5:
             mile_markers.append((segment.points[p+1].longitude, segment.points[p+1].latitude))
-            mile_markers2.append((segment.points[p+1].latitude, segment.points[p+1].longitude))
             cur_distance = 0.0
 
-    rectangles = []
-    for i in range(0, len(mile_markers2)-1):
-        rectangles.append(Rectangle(mile_markers2[i], mile_markers2[i+1]))
-
+    test = []
     for i in range(1, len(mile_markers)-1):
-        # d3 = distance(lonlat(mile_markers[i-1][0], mile_markers[i-1][1]), lonlat(mile_markers[i+1][0], mile_markers[i+1][1])).miles
-        phi1 = mile_markers[i-1][1]
-        phi2 = mile_markers[i+1][1]
-        del1 = mile_markers[i-1][0]
-        del2 = mile_markers[i+1][0]
+        del1 = rad(mile_markers[i-1][0])
+        phi1 = rad(mile_markers[i-1][1])
+        del2 = rad(mile_markers[i+1][0])
+        phi2 = rad(mile_markers[i+1][1])
         deltadel = del2 - del1
 
         bx = cos(phi2) * cos(deltadel)
@@ -38,9 +32,10 @@ def mile_divisions(segment: gpxpy.gpx.GPXTrackSegment):
         phi3 = atan2(sin(phi1) + sin(phi2), sqrt((cos(phi1) + bx)**2 + by**2))
         del3 = del1 + atan2(by, cos(phi1) + bx)
 
-        print(phi3, del3)
+        test.append((degrees(del3), degrees(phi3)))
+        print(degrees(del3), degrees(phi3))
 
-    create_rect_kml(rectangles, name="5mile poly")
+    create_track(test, name="Testing midpoint")
     create_track(mile_markers, name="5mile line")
 
 
