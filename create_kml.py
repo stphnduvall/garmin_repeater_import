@@ -15,6 +15,22 @@ def createKML(repeaters):
     return kml
 
 
+def create_rect_kml(rectangles, name=None):
+    kml = simplekml.Kml()
+    for rectangle in rectangles:
+        rect = kml.newpolygon(name=name)
+        rect.outerboundaryis = rectangle.corners()
+        rect.polystyle.color = simplekml.Color.rgb(255, 255, 255, 128)
+
+    kml.save(f'{name}.kml')
+
+
+def create_track(points: list, name=None, description=None):
+    kml = simplekml.Kml()
+    kml.newlinestring(name=name, description=description, coords=points)
+    kml.save(f"{name}.kml")
+
+
 if __name__ == "__main__":
     from time import localtime
     import requests
