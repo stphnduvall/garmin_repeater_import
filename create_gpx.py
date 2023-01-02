@@ -10,7 +10,7 @@ def create_gpx(repeaters):
 
         waypoint = gpxpy.gpx.GPXWaypoint(repeater.lat, repeater.long)
         waypoint.name = repeater.name()
-        waypoint.description = repeater.description()
+        waypoint.description = " ".join(repeater.description())
         waypoint.symbol = 'Custom 1'
 
         if repeater.dmr == "Yes":
