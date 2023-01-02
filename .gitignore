@@ -5,3 +5,4 @@ __pycache__
 *.gpx
 Icons/
 *.csv
+test data/*
