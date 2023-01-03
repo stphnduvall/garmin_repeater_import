@@ -34,7 +34,7 @@ def create_track(points: list, name=None, description=None):
 if __name__ == "__main__":
     from time import localtime
     import requests
-    import query_repeaters
+    import repeaters
 
     state = "georgia"
     url = f'https://www.repeaterbook.com/api/export.php?country=United%20States&state={state}'
@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
     filter = {'Use': 'PRIVATE', 'Operational Status': "Off-air"}
     require = {"EchoLink Node": ["", "0"], "FM Analog": "Yes", "IRLP Node": ["", "0"], "Wires Node": ""}
-    repeaters = query_repeaters.filter_repeaters(response['results'][:-1], filter=filter, require=require)
+    rptrs = repeaters.query_repeaters(response['results'][:-1], filter=filter, require=require)
 
-    kml = createKML(repeaters)
+    kml = createKML(rptrs)
     kml.save("repeaters" + "".join(map(str, localtime()[1:5])) + ".kml")

@@ -2,6 +2,17 @@
 import requests
 from sys import argv
 
+
+def remove_from_list(list):
+    print(*[f"{x}, {list[x]}\n" for x in range(0, len(list))])
+    i = input("Enter a value to remove from list")
+    while i != '':
+        list.pop(int(i))
+        print(*[f"{x}, {list[x]}\n" for x in range(0, len(list))])
+        i = input("Enter a value to remove from list")
+    return list
+
+
 def list_values(repeaters, key):
     values = []
     for repeater in repeaters:
@@ -9,6 +20,7 @@ def list_values(repeaters, key):
             if repeater[key] not in values:
                 values.append(repeater[key])
     return values
+
 
 if __name__ == "__main__":
     state = 'georgia'

@@ -1,5 +1,6 @@
 #!/mnt/g/my_git/garmin_repeater_import/venv/bin/python
 
+
 class Repeater():
     def __init__(self, rptr):
         self.state_id = rptr['State ID']
@@ -61,7 +62,7 @@ class Repeater():
         return desc
 
 
-def filter_repeaters(repeaters, filter={}, require={}):
+def query_repeaters(repeaters, filter={}, require={}):
     keys = [*repeaters[0].keys()]
     dumb_keys = [ 'Country', 'Nearest City', 'Landmark', 'County', 'State', 'Precise',
         'AllStar Node', 'EchoLink Node', 'NXDN', 'APCO P-25', 'P-25 NAC', 'Tetra',
@@ -105,11 +106,12 @@ if __name__ == "__main__":
     url = f'https://www.repeaterbook.com/api/export.php?country=United%20States&state={state}'
     response = requests.get(url).json()
     repeaters = response['results'][:-1]
+    print(repeaters[1])
 
     # filter removes data with corresponding values
     filter = {'Use': 'PRIVATE', 'Operational Status': "Off-air"}
     # require ensures data has corresponding values
     require = {"EchoLink Node": ["", "0"], "FM Analog": "Yes",
                 "IRLP Node": ["", "0"], "Wires Node": ""}
-    for repeater in filter_repeaters(repeaters, filter=filter, require=require):
-        print(repeater.callsign)
+    for repeater in query_repeaters(repeaters, filter=filter, require=require):
+        print(repeater)

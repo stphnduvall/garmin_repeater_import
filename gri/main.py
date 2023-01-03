@@ -1,9 +1,8 @@
 #!/mnt/g/my_git/garmin_repeater_import/venv/bin/python
 import requests
 from time import localtime
-import query_repeaters
-import create_kml
-
+from repeaters import query_repeaters
+from kml import createKML
 
 if __name__ == "__main__":
     state = "georgia"
@@ -12,8 +11,8 @@ if __name__ == "__main__":
 
     filter = {'Use': 'PRIVATE', 'Operational Status': "Off-air"}
     require = {"EchoLink Node": ["", "0"], "FM Analog": "Yes", "IRLP Node": ["", "0"], "Wires Node": ""}
-    repeaters = query_repeaters.filter_repeaters(response['results'][:-1], filter=filter, require=require)
+    rptrs = query_repeaters(response['results'][:-1], filter=filter, require=require)
 
-    kml = create_kml.createKML(repeaters)
+    kml = createKML(rptrs)
 
     kml.save("repeaters" + "".join(map(str, localtime()[1:5])) + ".kml")

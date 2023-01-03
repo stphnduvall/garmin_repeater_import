@@ -23,14 +23,15 @@ def create_gpx(repeaters):
 
 if __name__ == "__main__":
     import requests
-    import query_repeaters
+    from .repeaters import query_repeaters
+
     state = "georgia"
     url = f'https://www.repeaterbook.com/api/export.php?country=United%20States&state={state}'
     response = requests.get(url).json()
 
     filter = {'Use': 'PRIVATE', 'Operational Status': "Off-air"}
     require = {"EchoLink Node": ["", "0"], "FM Analog": "Yes", "IRLP Node": ["", "0"], "Wires Node": ""}
-    repeater_data = query_repeaters.filter_repeaters(response['results'][:-1], filter=filter, require=require)
+    repeater_data = query_repeaters(response['results'][:-1], filter=filter, require=require)
 
     gpx = create_gpx(repeater_data)
     print(gpx.to_xml())

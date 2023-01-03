@@ -2,8 +2,9 @@ import gpxpy
 import gpxpy.gpx
 from geopy.distance import lonlat, distance
 from geopy.units import rad, degrees
-from create_kml import create_track, create_rect_kml
+from kml import create_track
 from math import sin, cos, sqrt, asin, acos, atan2
+
 
 def mile_divisions(segment: gpxpy.gpx.GPXTrackSegment):
     total_distance = 0.0

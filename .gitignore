@@ -1,8 +1,6 @@
-*.kml
 venv
 .vscode
 __pycache__
 *.gpx
 Icons/
-*.csv
-test data/*
+data/*
