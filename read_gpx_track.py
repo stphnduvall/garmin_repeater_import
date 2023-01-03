@@ -33,8 +33,16 @@ def mile_divisions(segment: gpxpy.gpx.GPXTrackSegment):
         del3 = del1 + atan2(by, cos(phi1) + bx)
 
         test.append((degrees(del3), degrees(phi3)))
-        print(degrees(del3), degrees(phi3))
 
+        phi1 = rad(mile_markers[i][1])
+        del1 = rad(mile_markers[i][0])
+        deltadel = del3 - del1
+        bearing = atan2(sin(deltadel) * cos(phi3), cos(phi1)*sin(phi3)-sin(phi1)*cos(phi3)*cos(deltadel))
+        di = distance(lonlat(test[-1][0], test[-1][1]), lonlat(mile_markers[i][0], mile_markers[i][1]))
+        dest = distance.destination(di, lonlat(test[-1][0], test[-1][1]), bearing=degrees(bearing)+180)
+
+        test2 = [test[-1], (dest.longitude, dest.latitude)]
+    create_track(test2, name="Testing bearing")
     create_track(test, name="Testing midpoint")
     create_track(mile_markers, name="5mile line")
 
