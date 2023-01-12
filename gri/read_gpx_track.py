@@ -43,13 +43,13 @@ def mile_divisions(segment: gpxpy.gpx.GPXTrackSegment):
         dest = distance.destination(di, lonlat(test[-1][0], test[-1][1]), bearing=degrees(bearing)+180)
 
         test2 = [test[-1], (dest.longitude, dest.latitude)]
-    create_track(test2, name="Testing bearing")
-    create_track(test, name="Testing midpoint")
-    create_track(mile_markers, name="5mile line")
+    create_track(test2, name="data/Testing bearing")
+    create_track(test, name="data/Testing midpoint")
+    create_track(mile_markers, name="data/5mile line")
 
 
 if __name__ == "__main__":
-    gpx_file = open('Work Trips.gpx', 'r')
+    gpx_file = open('data/Work Trips.gpx', 'r')
     gpx = gpxpy.parse(gpx_file)
 
     mile_divisions(gpx.tracks[0].segments[0])
