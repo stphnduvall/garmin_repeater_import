@@ -2,6 +2,19 @@
 import simplekml
 
 
+class Line():
+    def __init__(self, points: list, name: str, description: str=""):
+        self.points = points
+        self.name = name
+        self.description = description
+
+
+"""
+To do:
+  - Create a custom kml class that can take my repeaters or line segments and returns a kml
+that is formatted correctly
+"""
+
 def createKML(repeaters):
     kml = simplekml.Kml()
     for repeater in repeaters:
@@ -29,6 +42,13 @@ def create_track(points: list, name=None, description=None):
     kml = simplekml.Kml()
     kml.newlinestring(name=name, description=description, coords=points)
     kml.save(f"{name}.kml")
+
+
+def create_tracks(lines: list, filename):
+    kml = simplekml.Kml()
+    for line in lines:
+        kml.newlinestring(name=line['name'], description=line['description'], coords=line['points'])
+    kml.save(f'{filename}.kml')
 
 
 if __name__ == "__main__":
