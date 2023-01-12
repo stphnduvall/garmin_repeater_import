@@ -78,7 +78,45 @@ def calculate_projection(point: gpxpy.gpx.GPXTrackPoint, bearing: float, di: flo
 
 
 def outline_track(track: gpxpy.gpx.GPXTrack):
-    ...
+    points = n_mile_divisions(track.segments[0], 5)
+    midpoints = []
+    projection1 = []
+    projection2 = []
+    bearing = 0
+    bearings = []
+    proj1 = True
+    for i in range(1, len(points) - 1):
+        midpoint = calculate_midpoint(points[i-1], points[i+1])
+        midpoints.append(midpoint)
+
+        last_bearing = bearing
+        bearing = calculate_bearing(points[i], midpoint)
+        if ((bearing - last_bearing) > 0):
+            proj1 = not(proj1)
+
+        print(proj1, f"{abs(bearing)} - {abs(last_bearing)} = |{abs(abs(bearing)-abs(last_bearing))}|")
+        projection = calculate_projection(points[i], bearing, 5)
+
+        if proj1:
+            projection1.append((projection.longitude, projection.latitude))
+            bearings.append([(midpoint.longitude, midpoint.latitude), (points[i].longitude, points[i].latitude)])
+            bearings.append([(midpoint.longitude, midpoint.latitude), (projection.longitude, projection.latitude)])
+            bearings.append([(points[i].longitude, points[i].latitude), (projection.longitude, projection.latitude)])
+        else:
+            projection2.append((projection.longitude, projection.latitude))
+            bearings.append([(midpoint.longitude, midpoint.latitude), (points[i].longitude, points[i].latitude)])
+            bearings.append([(midpoint.longitude, midpoint.latitude), (projection.longitude, projection.latitude)])
+            bearings.append([(points[i].longitude, points[i].latitude), (projection.longitude, projection.latitude)])
+
+    # create_track(name="data/Projection1", description="", points=projection1)
+    # create_track(name="data/Projection2", description="", points=projection2)
+    tracks = [{'points': projection1, 'name': "Projection1", 'description': ''},
+              {'points': projection2, 'name': "Projection2", 'description': ''}]
+    for bearing_line in bearings:
+        tracks.append({'points': bearing_line, 'name': 'Bearing line', 'description': ''})
+
+    return tracks
+    create_tracks(tracks, "data/Projections")
 
 
 def create_gpx(repeaters):
@@ -118,41 +156,5 @@ if __name__ == "__main__":
     gpx_file = open('data/Work Trips.gpx', 'r')
     gpx = gpxpy.parse(gpx_file)
 
-    points = n_mile_divisions(gpx.tracks[0].segments[0], 5)
-    midpoints = []
-    projection1 = []
-    projection2 = []
-    bearing = 0
-    bearings = []
-    proj1 = True
-    for i in range(1, len(points) - 1):
-        midpoint = calculate_midpoint(points[i-1], points[i+1])
-        midpoints.append(midpoint)
+    create_tracks(outline_track(gpx.tracks[0]), "data/Tracks")
 
-        last_bearing = bearing
-        bearing = calculate_bearing(points[i], midpoint)
-        if ((bearing - last_bearing) > 0):
-            proj1 = not(proj1)
-
-        print(proj1, f"{abs(bearing)} - {abs(last_bearing)} = |{abs(abs(bearing)-abs(last_bearing))}|")
-        projection = calculate_projection(points[i], bearing, 5)
-
-        if proj1:
-            projection1.append((projection.longitude, projection.latitude))
-            bearings.append([(midpoint.longitude, midpoint.latitude), (points[i].longitude, points[i].latitude)])
-            bearings.append([(midpoint.longitude, midpoint.latitude), (projection.longitude, projection.latitude)])
-            bearings.append([(points[i].longitude, points[i].latitude), (projection.longitude, projection.latitude)])
-        else:
-            projection2.append((projection.longitude, projection.latitude))
-            bearings.append([(midpoint.longitude, midpoint.latitude), (points[i].longitude, points[i].latitude)])
-            bearings.append([(midpoint.longitude, midpoint.latitude), (projection.longitude, projection.latitude)])
-            bearings.append([(points[i].longitude, points[i].latitude), (projection.longitude, projection.latitude)])
-
-    # create_track(name="data/Projection1", description="", points=projection1)
-    # create_track(name="data/Projection2", description="", points=projection2)
-    tracks = [{'points': projection1, 'name': "Projection1", 'description': ''},
-              {'points': projection2, 'name': "Projection2", 'description': ''}]
-    for bearing_line in bearings:
-        tracks.append({'points': bearing_line, 'name': 'Bearing line', 'description': ''})
-
-    create_tracks(tracks, "data/Projections")
